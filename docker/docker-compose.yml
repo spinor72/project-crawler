@@ -1,0 +1,71 @@
+version: '3.3'
+services:
+  crawlerdb:
+    image: mongo:${MONGO_VERSION}
+    volumes:
+      - crawler_db:/data/db
+    networks:
+      net_back:
+        aliases:
+          - crawlerdb
+
+  crawlermq:
+    image: rabbitmq:${RABBITMQ_VERSION}
+    environment:
+      - RABBITMQ_DEFAULT_USER=crawler
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    # ports:
+    #   - 5672:5672
+    networks:
+      net_back:
+        aliases:
+          - crawlermq
+
+  ui:
+    image: ${USER_NAME}/crawler-ui:${CRAWLER_UI_VERSION}
+    ports:
+      - 8000:8000/tcp
+    environment:
+      - MONGO=crawlerdb
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=crawler
+    networks:
+      net_front:
+        aliases:
+          - uri
+      net_back:
+        aliases:
+          - ui
+
+  engine:
+    image: ${USER_NAME}/crawler-engine:${CRAWLER_ENGINE_VERSION}
+    environment:
+      - MONGO=crawlerdb
+      - RMQ_HOST=crawlermq
+      - RMQ_QUEUE=crawler
+      - RMQ_USERNAME=crawler
+      - RMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
+      - CHECK_INTERVAL=1
+      - EXCLUDE_URLS=.*github.com
+    networks:
+      net_back:
+        aliases:
+          - engine
+
+volumes:
+  crawler_db:
+
+networks:
+  net_back:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.0.2.0/24
+
+  net_front:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.0.1.0/24
