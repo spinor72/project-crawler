@@ -1,0 +1,16 @@
+alertmanagerFiles:
+  alertmanager.yml:
+    global:
+      slack_api_url: 'https://hooks.slack.com/services/0000000000000000000000000000000000000'
+
+    receivers:
+      - name: 'default-receiver'
+        slack_configs:
+          - channel: '#your_chanel'
+            text: "{{ .CommonAnnotations.description }}"
+
+    route:
+      routes:
+        - match:
+            severity: page
+          receiver: 'default-receiver'

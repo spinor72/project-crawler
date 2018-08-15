@@ -1,0 +1,7 @@
+kibana:
+  ingress:
+    enabled: true
+    hosts:
+      - crawler-kibana
+  env:
+    ELASTICSEARCH_URL: http://elasticsearch-logging:9200
