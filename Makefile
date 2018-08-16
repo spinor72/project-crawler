@@ -110,7 +110,7 @@ k8s_helm_init:
 	helm init --service-account tiller
 	kubectl get pods -n kube-system --selector app=helm
 k8s_helm_gitlab:
-	helm install --name gitlab --namespace dev   kubernetes/charts/gitlab-omnibus -f kubernetes/charts/gitlab-omnibus/values.yaml
+	helm install --name gitlab --namespace dev   kubernetes/charts/gitlab -f kubernetes/charts/gitlab/values.yaml
 
 k8s_nginx_ingress:
 	helm install stable/nginx-ingress --name nginx
