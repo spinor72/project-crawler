@@ -12,7 +12,7 @@ node_count = 2
 
 big_node_count = 2
 
-kubernetes_version = "1.8.10-gke.0"
+kubernetes_version = "1.8.10-gke.2"
 
 disable_dashboard = false
 

@@ -110,7 +110,14 @@ k8s_helm_init:
 	helm init --service-account tiller
 	kubectl get pods -n kube-system --selector app=helm
 k8s_helm_gitlab:
-	helm install --name gitlab --namespace dev   kubernetes/charts/gitlab -f kubernetes/charts/gitlab/values.yaml
+	helm install --name gitlab --namespace dev   kubernetes/charts/gitlab \
+	-f kubernetes/charts/gitlab/values.yaml \
+	--set gitlab.migrations.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ce \
+	--set gitlab.sidekiq.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce \
+	--set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce
+	kubectl get secret gitlab-gitlab-initial-root-password --namespace dev -ojsonpath={.data.password} | base64 --decode
+
+# --set gitlab.migrations.initialRootPassword="$(GITLAB_ROOT_PASSWORD)"
 
 k8s_nginx_ingress:
 	helm install stable/nginx-ingress --name nginx
