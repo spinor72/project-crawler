@@ -159,6 +159,7 @@ gitlab-runner:
       s3BucketLocation: us-east-1
       s3CachePath: gitlab-runner
       s3CacheInsecure: false
+    privileged: true
 # gitlab:
 #   migrations:
 #     enabled: false

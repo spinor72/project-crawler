@@ -110,7 +110,7 @@ k8s_helm_init:
 	helm init --service-account tiller
 	kubectl get pods -n kube-system --selector app=helm
 k8s_helm_gitlab:
-	helm install --name gitlab --namespace dev   kubernetes/charts/gitlab \
+	helm upgrade --install  gitlab    kubernetes/charts/gitlab --namespace dev \
 	-f kubernetes/charts/gitlab/values.yaml \
 	--set gitlab.migrations.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ce \
 	--set gitlab.sidekiq.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce \
