@@ -1,0 +1,8 @@
+---
+name: engine
+version: 1.0.0
+description: OTUS crawler application ENGINE
+maintainers:
+  - name: Andrei Ryzhkov
+    email: spinor72@gmail.com
+appVersion: 1.0

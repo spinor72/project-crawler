@@ -1,0 +1,8 @@
+---
+name: ui
+version: 1.0.0
+description: OTUS crawler application UI
+maintainers:
+  - name: Andrei Ryzhkov
+    email: spinor72@gmail.com
+appVersion: 1.0

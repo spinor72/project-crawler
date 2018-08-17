@@ -1,0 +1,14 @@
+---
+service:
+  internalPort: 9292
+  externalPort: 9292
+
+image:
+  repository: spinor72/crawler-ui
+  tag: latest
+
+ingress:
+  class: nginx
+
+engineHost:
+enginePort:
