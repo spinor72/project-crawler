@@ -115,9 +115,9 @@ production:
     mv linux-amd64/helm /usr/bin/
     helm version --client
 
-    # не работает install_tiller под версией 1.11.2, зафиксил на 1.10.2
+    # не работает install_tiller под версией 1.11.2, зафиксил на 1.10.2, 1.8.10 как версия кластера
     # curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-    curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.2/bin/linux/amd64/kubectl
+    curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.8.10/bin/linux/amd64/kubectl
     chmod +x /usr/bin/kubectl
     kubectl version --client
   }
