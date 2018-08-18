@@ -1,7 +1,7 @@
 ---
 service:
-  internalPort: 9292
-  externalPort: 9292
+  internalPort: 8000
+  externalPort: 8000
 
 image:
   repository: spinor72/crawler-ui

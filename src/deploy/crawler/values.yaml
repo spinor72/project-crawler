@@ -4,6 +4,7 @@ engine:
     tag: latest
     service:
       externalPort: 8000
+    secret: gitlab-registry
 
 ui:
   image:
@@ -11,3 +12,4 @@ ui:
     tag: latest
     service:
       externalPort: 8000
+    secret: gitlab-registry

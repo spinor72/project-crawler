@@ -1,5 +1,5 @@
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: {{ template "engine.fullname" . }}
@@ -8,7 +8,7 @@ metadata:
     component: engine
     release: {{ .Release.Name }}
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: crawler
@@ -16,7 +16,7 @@ spec:
       release: {{ .Release.Name }}
   template:
     metadata:
-      name: engine
+      name: engine-pod
       labels:
         app: crawler
         component: engine

@@ -63,21 +63,42 @@ production:
     track="${1-stable}"
     name="$CI_ENVIRONMENT_SLUG"
     helm dep build crawler
-
+    echo "create secret for registry ..."
+    kubectl create secret -n "$KUBE_NAMESPACE" \
+      docker-registry gitlab-registry \
+      --docker-server="https://registry.rportal.cloud/v1/" \
+      --docker-username="${ENGINE_REPO_USER}" \
+      --docker-password="${ENGINE_REPO_TOKEN}" \
+      --docker-email="$GITLAB_USER_EMAIL" \
+      -o yaml --dry-run | kubectl replace -n "$KUBE_NAMESPACE" --force -f -
+    # kubectl create secret -n "$KUBE_NAMESPACE" \
+    #   docker-registry gitlab-registry \
+    #   --docker-server="https://registry.rportal.cloud/v1/" \
+    #   --docker-username="${CI_DEPLOY_USER:-$CI_REGISTRY_USER}" \
+    #   --docker-password="${CI_DEPLOY_PASSWORD:-$CI_REGISTRY_PASSWORD}" \
+    #   --docker-email="$GITLAB_USER_EMAIL" \
+    #   -o yaml --dry-run | kubectl replace -n "$KUBE_NAMESPACE" --force -f -
+    if [[ "$CI_PROJECT_VISIBILITY" != "public" ]]; then
+      secret_name='gitlab-registry'
+    else
+      secret_name=''
+    fi
     # for microservice in $(helm dep ls | grep "file://" | awk '{print $1}') ; do
     #   SET_VERSION="$SET_VERSION \ --set $microservice.image.tag='$(curl http://gitlab-gitlab/$CI_PROJECT_NAMESPACE/ui/raw/master/VERSION)' "
+    # header="PRIVATE-TOKEN: $USER_ACCESS_TOKEN"
     echo "helm install ..."
-
-    helm upgrade --install \
+    helm upgrade --install --debug \
       --wait \
       --set ui.ingress.host="$host" \
-      --set ui.image.tag="$(curl https://gitlab.rportal.cloud/$CI_PROJECT_NAMESPACE/ui/raw/master/VERSION)" \
-      --set post.image.tag="$(curl https://gitlab.rportal.cloud/$CI_PROJECT_NAMESPACE/post/raw/master/VERSION)" \
-      --set comment.image.tag="$(curl https://gitlab.rportal.cloud/$CI_PROJECT_NAMESPACE/comment/raw/master/VERSION)" \
+      --set ui.image.tag="$(curl --request GET --header 'PRIVATE-TOKEN: '"$USER_ACCESS_TOKEN"'' https://gitlab.rportal.cloud/otus/ui/raw/master/VERSION)" \
+      --set engine.image.tag="$(curl --request GET --header 'PRIVATE-TOKEN: '"$USER_ACCESS_TOKEN"'' https://gitlab.rportal.cloud/otus/engine/raw/master/VERSION)" \
+      --set ui.image.repository="$CI_REGISTRY/otus/ui" \
+      --set engine.image.repository="$CI_REGISTRY/otus/engine" \
       --namespace="$KUBE_NAMESPACE" \
       --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
       "$name" \
       crawler
+      # --set image.secrets[0].name="$secret_name" \
   }
 
   function install_dependencies() {
@@ -94,7 +115,9 @@ production:
     mv linux-amd64/helm /usr/bin/
     helm version --client
 
-    curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    # не работает install_tiller под версией 1.11.2, зафиксил на 1.10.2
+    # curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    curl -L -o /usr/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.2/bin/linux/amd64/kubectl
     chmod +x /usr/bin/kubectl
     kubectl version --client
   }
