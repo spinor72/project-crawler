@@ -30,5 +30,19 @@ spec:
           name: engine
           protocol: TCP
         env:
-        - name: ENGINE_DATABASE_HOST
-          value: {{ .Values.databaseHost | default (printf "%s-mongodb" .Release.Name) }}
+        - name: MONGO
+          value: {{ .Values.database.host | default (printf "%s-mongodb" .Release.Name) }}
+        - name: MONGO_PORT
+          value: {{ .Values.database.port | default 27017 | quote }}
+        - name: RMQ_HOST
+          value: {{ .Values.rmq.host | default (printf "%s-rabbitmq" .Release.Name) }}
+        - name: RMQ_QUEUE
+          value: {{ .Values.rmq.queue | default "crawler" }}
+        - name: RMQ_USERNAME
+          value: {{ .Values.rmq.username | default "crawler" }}
+        - name: RMQ_PASSWORD
+          value: {{ .Values.rmq.password }}
+        - name: CHECK_INTERVAL
+          value: {{ .Values.checkInterval | default 1 | quote }}
+        - name: EXCLUDE_URLS
+          value: {{ .Values.excludeUrls | default ".*github.com" }}

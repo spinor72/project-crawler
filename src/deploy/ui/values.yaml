@@ -10,5 +10,6 @@ image:
 ingress:
   class: nginx
 
-engineHost:
-enginePort:
+database:
+  host:
+  port:

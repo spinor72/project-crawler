@@ -129,9 +129,11 @@ k8s_prometheus:
 	cd kubernetes/charts/prometheus && helm upgrade prom . -f custom_values.yaml -f alertmanager_config.yaml --install
 
 k8s_crawler:
-	cd kubernetes/charts/crawler && helm upgrade crawler-test . --install
-	cd kubernetes/charts/crawler && helm upgrade production --namespace production . --install
-	cd kubernetes/charts/crawler && helm upgrade staging --namespace staging . --install
+	cd src/deploy/crawler && helm dep build . && helm upgrade review --namespace review . --install \
+	--set rabbitmq.rabbitmq.username=crawler \
+	--set rabbitmq.rabbitmq.password="$(RABBITMQ_DEFAULT_PASS)" \
+	--set engine.rmq.password="$(RABBITMQ_DEFAULT_PASS)" \
+	--set engine.rmq.username=crawler
 
 k8s_grafana_provisioning:
 	kubectl create configmap grafana-prometheus-datasource  --from-file=prometheus.yaml=kubernetes/grafana/datasources/prometheus.yaml

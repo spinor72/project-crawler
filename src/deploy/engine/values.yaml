@@ -7,4 +7,15 @@ image:
   repository: spinor72/crawler-engine
   tag: latest
 
-databaseHost:
+database:
+  host:
+  port: 27017
+
+rmq:
+  host:
+  queue: crawler
+  username: crawler
+  password:
+
+check_interval: 1
+exclude_urls: ""
