@@ -114,7 +114,8 @@ k8s_helm_gitlab:
 	-f kubernetes/charts/gitlab/values.yaml \
 	--set gitlab.migrations.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ce \
 	--set gitlab.sidekiq.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce \
-	--set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce
+	--set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce \
+	--set-string nginx-ingress.controller.scope.enabled=false
 	kubectl get secret gitlab-gitlab-initial-root-password --namespace dev -ojsonpath={.data.password} | base64 --decode
 
 # --set gitlab.migrations.initialRootPassword="$(GITLAB_ROOT_PASSWORD)"
