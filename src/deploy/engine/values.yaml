@@ -1,0 +1,21 @@
+---
+service:
+  internalPort: 8000
+  externalPort: 8000
+
+image:
+  repository: spinor72/crawler-engine
+  tag: latest
+
+database:
+  host:
+  port: 27017
+
+rmq:
+  host:
+  queue: crawler
+  username: crawler
+  password:
+
+check_interval: 1
+exclude_urls: ""

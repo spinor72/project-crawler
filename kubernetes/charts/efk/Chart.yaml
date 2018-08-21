@@ -1,0 +1,6 @@
+name: efk
+version: 0.1.0
+description: EFK for OTUS sample crawler application
+maintainers:
+  - name: Andrei Ryzhkov
+    email: spinor72@gmail.com

@@ -1,0 +1,15 @@
+---
+service:
+  internalPort: 8000
+  externalPort: 8000
+
+image:
+  repository: spinor72/crawler-ui
+  tag: latest
+
+ingress:
+  class: nginx
+
+database:
+  host:
+  port:

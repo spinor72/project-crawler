@@ -1,0 +1,15 @@
+engine:
+  image:
+    repository: spinor72/crawler-engine
+    tag: latest
+    service:
+      externalPort: 8000
+    secret: gitlab-registry
+
+ui:
+  image:
+    repository: spinor72/crawler-ui
+    tag: latest
+    service:
+      externalPort: 8000
+    secret: gitlab-registry
